@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Appointments Management</title>
+    <link rel="stylesheet" href="Agenda.css">
+<body class="body-bg">
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1 class="title">Agenda de citas</h1>
+                <div class="search-export">
+                    <div class="search-box">
+                        <input type="text" placeholder="Buscar" class="search-input">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <button class="export-button">
+                        <i class="fas fa-download"></i> Descargar
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="appointments-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del paciente</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Historial clinico</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hannia Acopa</td>
+                            <td>15/12/2023</td>
+                            <td>10:30 AM</td>
+                            <td>MRN001234</td>
+                            <td>
+                                <div class="actions">
+                                    <button title="View Details" class="view-btn"><i class="fas fa-eye"></i></button>
+                                    <button title="Confirm Appointment" class="confirm-btn"><i class="fas fa-check"></i></button>
+                                    <button title="Cancel Appointment" class="cancel-btn"><i class="fas fa-times"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>Eimy Antonio</td>
+                            <td>16/12/2023</td>
+                            <td>11:45 AM</td>
+                            <td>MRN001235</td>
+                            <td>
+                                <div class="actions">
+                                    <button title="View Details" class="view-btn"><i class="fas fa-eye"></i></button>
+                                    <button title="Confirm Appointment" class="confirm-btn"><i class="fas fa-check"></i></button>
+                                    <button title="Cancel Appointment" class="cancel-btn"><i class="fas fa-times"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span class="entries-info">pagina 1 de 2</span>
+                <div class="pagination-buttons">
+                    <button disabled>Previous</button>
+                    <button class="active">1</button>
+                    <button disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
