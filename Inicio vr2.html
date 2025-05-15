@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanacita - Citas Médicas</title>
+    <link rel="stylesheet" href="Inicio vr2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="body-bg">
+    <!-- Header -->
+    <header class="header">
+        <button id="menuBtn" class="menu-btn">☰</button>
+        <div class="user-icon">
+            <i class="bi bi-person-circle"></i>
+        </div>
+    </header>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu hidden">
+        <div class="side-menu-header">
+            <button id="closeMenu" class="close-btn">✕</button>
+        </div>
+        <nav class="side-nav">
+            <a href="#">Citas</a>
+            <a href="#">Notificaciones</a>
+            <a href="#">Historial Médico</a>
+        </nav>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay hidden"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="intro">
+            <img src="Imagenes progsanacita/Logsanacita.jpeg" alt="Sanacita Logo" class="logo">
+            <h1 class="title">Sanacita</h1>
+            <p class="subtitle">Citas médicas al alcance de tu mano, sin espera ni filas</p>
+        </div>
+
+        <div class="cards-container">
+            <div class="card">
+                <img src="Imagenes progsanacita/Centro de salud1.jpg" alt="Centro de Salud Puerto Esmeralda" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Centro de Salud Puerto Esmeralda</h3>
+                    <p class="card-hours">Horarios: 8:00 AM - 8:00 PM</p>
+                    <p class="card-desc">Instalaciones modernas con equipo de última generación</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Imagenes progsanacita/Centro de salud 2.jpg" alt="Centro de Salud Rancho Alegre" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Centro de Salud Rancho Alegre</h3>
+                    <p class="card-hours">Horarios: 7:00 AM - 9:00 PM</p>
+                    <p class="card-desc">Atención médica integral para toda la familia</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Imagenes progsanacita/centro de salud 3.jpg" alt="Salud Olmeca" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Salud Olmeca</h3>
+                    <p class="card-hours">Horarios: 24/7</p>
+                    <p class="card-desc">Urgencias y tratamientos especializados</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="Imagenes progsanacita/centro de salud 4.jpg" alt="Centro de Salud Teresa Morales" class="card-img">
+                <div class="card-content">
+                    <h3 class="card-title">Centro de Salud Teresa Morales</h3>
+                    <p class="card-hours">Horarios: 8:00 AM - 6:00 PM</p>
+                    <p class="card-desc">Especialistas en medicina preventiva</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script -->
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const sideMenu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+
+        menuBtn.addEventListener('click', () => {
+            sideMenu.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            sideMenu.classList.add('hidden');
+            overlay.classList.add('hidden');
+        });
+
+        overlay.addEventListener('click', () => {
+            sideMenu.classList.add('hidden');
+            overlay.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
