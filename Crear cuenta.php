@@ -1,3 +1,42 @@
+<?php
+require 'conexion.php';
+
+$mensaje = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validar y sanitizar los datos
+    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+    $apellidos = filter_input(INPUT_POST, 'apellidos', FILTER_SANITIZE_STRING);
+    $edad = filter_input(INPUT_POST, 'edad', FILTER_SANITIZE_NUMBER_INT);
+    $genero = filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $terminos = isset($_POST['terminos']) ? 1 : 0;
+
+    // Validaciones
+    if (!$nombre || !$apellidos || !$edad || !$genero || !$email || !$password) {
+        $mensaje = '<div class="error">Todos los campos son obligatorios</div>';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $mensaje = '<div class="error">El correo electrónico no es válido</div>';
+    } elseif (!$terminos) {
+        $mensaje = '<div class="error">Debes aceptar los términos y condiciones</div>';
+    } else {
+        // Intentar registrar el usuario
+        $stmt = $conn->prepare("INSERT INTO usuarios (nombre, apellidos, edad, genero, email, password, acepto_terminos) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssisssi", $nombre, $apellidos, $edad, $genero, $email, $password, $terminos);
+
+        if ($stmt->execute()) {
+            $mensaje = '<div class="exito">¡Registro exitoso! Bienvenido a nuestro sistema de citas médicas.</div>';
+            echo "<script>window.location.href = 'login.php';</script>";
+        } elseif ($stmt->errno == 1062) { // Error: email ya existe
+            $mensaje = '<div class="error">El correo electrónico ya está registrado</div>';
+        } else {
+            $mensaje = '<div class="error">Error al registrar: ' . $stmt->error . '</div>';
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
