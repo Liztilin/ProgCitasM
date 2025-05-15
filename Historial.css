@@ -1,0 +1,110 @@
+body {
+    background-color: #dbeafe;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+}
+
+.formulario {
+    max-width: 1200px;
+    margin: auto;
+    background-color: #bfdbfe;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2rem;
+    color: #1e3a8a;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.25rem;
+    color: #1e40af;
+    margin-bottom: 15px;
+}
+
+.contenedor {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+@media (min-width: 768px) {
+    .contenedor {
+        flex-direction: row;
+    }
+}
+
+.seccion {
+    flex: 1;
+}
+
+.campo {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px #e0e7ff;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.diagnostico {
+    margin-top: 30px;
+}
+
+.nota {
+    margin-top: 20px;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.boton-contenedor {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+button {
+    background-color: #3d44c4;
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #040478;
+    transform: scale(1.05);
+}
