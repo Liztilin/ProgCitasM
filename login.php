@@ -11,20 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         $mensaje = '<div class="error">Todos los campos son obligatorios</div>';
     } else {
-        $stmt = $conn->prepare("SELECT id, nombre, password, rol FROM usuarios WHERE email = ?");
+        $stmt = $conn->prepare("SELECT id_usuario, nombre, password FROM usuario WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         if ($result->num_rows === 1) {
             $usuario = $result->fetch_assoc();
-            
+
             if (password_verify($password, $usuario['password'])) {
-                $_SESSION['usuario_id'] = $usuario['id'];
+                $_SESSION['usuario_id'] = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre'];
-                $_SESSION['usuario_rol'] = $usuario['rol'];
-                $_SESSION['usuario_email'] = $usuario['email'];
-                
+                $_SESSION['usuario_email'] = $email;
+
                 header("Location: inicio.html");
                 exit();
             } else {
@@ -45,11 +44,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="Bienvenidos.css">
+    <style>
+        .error {
+            color: white;
+            background-color: #e74c3c;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
         <h1>¡Bienvenido!</h1>
-        <form class="login-form">
+
+        <?php if (!empty($mensaje)) echo $mensaje; ?>
+
+        <form class="login-form" method="POST" action="">
             <label for="email">Correo electrónico</label>
             <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com">
 
@@ -63,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit">Entrar</button>
         </form>
 
-        <p class="register-link">¿No tienes una cuenta? <a href="#">Crear una cuenta</a></p>
+        <p class="register-link">¿No tienes una cuenta? <a href="crear_cuenta.php">Crear una cuenta</a></p>
     </div>
 </body>
 </html>

@@ -6,29 +6,27 @@ $mensaje = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar y sanitizar los datos
     $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
-    $apellidos = filter_input(INPUT_POST, 'apellidos', FILTER_SANITIZE_STRING);
+    $apellido_p = filter_input(INPUT_POST, 'apellido_p', FILTER_SANITIZE_STRING);
+    $apellido_m = filter_input(INPUT_POST, 'apellido_m', FILTER_SANITIZE_STRING);
     $edad = filter_input(INPUT_POST, 'edad', FILTER_SANITIZE_NUMBER_INT);
     $genero = filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $terminos = isset($_POST['terminos']) ? 1 : 0;
 
     // Validaciones
-    if (!$nombre || !$apellidos || !$edad || !$genero || !$email || !$password) {
+    if (!$nombre || !$apellido_p || !$apellido_m || !$edad || !$genero || !$email || !$password) {
         $mensaje = '<div class="error">Todos los campos son obligatorios</div>';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $mensaje = '<div class="error">El correo electrónico no es válido</div>';
-    } elseif (!$terminos) {
-        $mensaje = '<div class="error">Debes aceptar los términos y condiciones</div>';
     } else {
-        // Intentar registrar el usuario
-        $stmt = $conn->prepare("INSERT INTO usuarios (nombre, apellidos, edad, genero, email, password, acepto_terminos) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssisssi", $nombre, $apellidos, $edad, $genero, $email, $password, $terminos);
+        // Intentar registrar el usuario (tabla: usuario)
+        $stmt = $conn->prepare("INSERT INTO usuario (nombre, apellido_p, apellido_m, edad, genero, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssisss", $nombre, $apellido_p, $apellido_m, $edad, $genero, $email, $password);
 
         if ($stmt->execute()) {
             $mensaje = '<div class="exito">¡Registro exitoso! Bienvenido a nuestro sistema de citas médicas.</div>';
             echo "<script>window.location.href = 'login.php';</script>";
-        } elseif ($stmt->errno == 1062) { // Error: email ya existe
+        } elseif ($stmt->errno == 1062) { // Error: email ya registrado
             $mensaje = '<div class="error">El correo electrónico ya está registrado</div>';
         } else {
             $mensaje = '<div class="error">Error al registrar: ' . $stmt->error . '</div>';
@@ -36,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -55,8 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </svg>
                 Crear Cuenta Nueva
             </h1>
-            
-            <form id="registrationForm" novalidate>
+
+            <?php if (!empty($mensaje)) echo $mensaje; ?>
+
+            <form id="registrationForm" method="POST" novalidate>
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
                     <input type="text" id="nombre" name="nombre" required pattern="[A-Za-zÀ-ÿ\s]+" minlength="2" oninput="validateField(this)">
@@ -64,9 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="apellidos">Apellidos</label>
-                    <input type="text" id="apellidos" name="apellidos" required pattern="[A-Za-zÀ-ÿ\s]+" minlength="2" oninput="validateField(this)">
-                    <p id="apellidosError" class="error-message">Los apellidos deben tener al menos 2 caracteres y solo letras</p>
+                    <label for="apellido_p">Apellido Paterno</label>
+                    <input type="text" id="apellido_p" name="apellido_p" required pattern="[A-Za-zÀ-ÿ\s]+" minlength="2" oninput="validateField(this)">
+                    <p id="apellido_pError" class="error-message">Debe tener al menos 2 caracteres y solo letras</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido_m">Apellido Materno</label>
+                    <input type="text" id="apellido_m" name="apellido_m" required pattern="[A-Za-zÀ-ÿ\s]+" minlength="2" oninput="validateField(this)">
+                    <p id="apellido_mError" class="error-message">Debe tener al menos 2 caracteres y solo letras</p>
                 </div>
 
                 <div class="form-group">
@@ -89,8 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" required minlength="8" oninput="validateField(this)">
+                    <input type="password" id="password" name="password" required minlength="3" oninput="validateField(this)">
                     <p id="passwordError" class="error-message">La contraseña debe tener al menos 8 caracteres</p>
+                </div>
+
+                <div class="form-group">
+                    <label><input type="checkbox" name="terminos" required> Acepto los términos y condiciones</label>
                 </div>
 
                 <button type="submit" id="submitBtn" disabled>Crear Cuenta</button>
@@ -105,9 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             let isValid = true;
 
             if (input.type === 'email') {
-                isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(input.value);
+                isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
             } else if (input.type === 'password') {
-                isValid = input.value.length >= 8;
+                isValid = input.value.length >= 3;
             } else if (input.type === 'text') {
                 isValid = input.value.length >= 2 && /^[A-Za-zÀ-ÿ\\s]+$/.test(input.value);
             }
@@ -126,18 +137,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (input.type === 'radio') {
                     return document.querySelector('input[name="genero"]:checked');
                 }
+                if (input.type === 'checkbox') {
+                    return input.checked;
+                }
                 return input.checkValidity() && input.value.length > 0;
             });
 
             submitButton.disabled = !allValid;
         }
-
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (this.checkValidity()) {
-                alert('Formulario enviado correctamente');
-            }
-        });
     </script>
 </body>
 </html>
