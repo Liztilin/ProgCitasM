@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['usuario_nombre'] = $usuario['nombre'];
                 $_SESSION['usuario_email'] = $email;
 
-                header("Location: inicio vr2.html");
+                header("Location: Iniciovr2.html");
                 exit();
             } else {
                 $mensaje = '<div class="error">Credenciales incorrectas</div>';
