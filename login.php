@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = $result->fetch_assoc();
 
             if (password_verify($password, $usuario['password'])) {
-                $_SESSION['usuario_id'] = $usuario['id_usuario'];
+                $_SESSION['id_usuario'] = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre'];
                 $_SESSION['usuario_email'] = $email;
 
