@@ -5,9 +5,9 @@ $mensaje = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar y sanitizar los datos
-    $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
-    $apellido_p = filter_input(INPUT_POST, 'apellido_p', FILTER_SANITIZE_STRING);
-    $apellido_m = filter_input(INPUT_POST, 'apellido_m', FILTER_SANITIZE_STRING);
+    $nombre = trim(filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING));
+    $apellido_p = trim(filter_input(INPUT_POST, 'apellido_p', FILTER_SANITIZE_STRING));
+    $apellido_m = trim(filter_input(INPUT_POST, 'apellido_m', FILTER_SANITIZE_STRING));
     $edad = filter_input(INPUT_POST, 'edad', FILTER_SANITIZE_NUMBER_INT);
     $genero = filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -19,14 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $mensaje = '<div class="error">El correo electrónico no es válido</div>';
     } else {
-        // Intentar registrar el usuario (tabla: usuario)
         $stmt = $conn->prepare("INSERT INTO usuario (nombre, apellido_p, apellido_m, edad, genero, email, password) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssisss", $nombre, $apellido_p, $apellido_m, $edad, $genero, $email, $password);
 
         if ($stmt->execute()) {
             $mensaje = '<div class="exito">¡Registro exitoso! Bienvenido a nuestro sistema de citas médicas.</div>';
             echo "<script>window.location.href = 'login.php';</script>";
-        } elseif ($stmt->errno == 1062) { // Error: email ya registrado
+        } elseif ($stmt->errno == 1062) {
             $mensaje = '<div class="error">El correo electrónico ya está registrado</div>';
         } else {
             $mensaje = '<div class="error">Error al registrar: ' . $stmt->error . '</div>';
@@ -34,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -48,12 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-container">
         <div class="circle-decoration"></div>
         <div class="form-content">
-            <h1 class="form-title">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Crear Cuenta Nueva
-            </h1>
+            <h1 class="form-title">Crear Cuenta Nueva</h1>
 
             <?php if (!empty($mensaje)) echo $mensaje; ?>
 
@@ -96,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" required minlength="3" oninput="validateField(this)">
+                    <input type="password" id="password" name="password" required minlength="8" oninput="validateField(this)">
                     <p id="passwordError" class="error-message">La contraseña debe tener al menos 8 caracteres</p>
                 </div>
 
@@ -118,9 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (input.type === 'email') {
                 isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
             } else if (input.type === 'password') {
-                isValid = input.value.length >= 3;
+                isValid = input.value.length >= 8;
             } else if (input.type === 'text') {
-                isValid = input.value.length >= 2 && /^[A-Za-zÀ-ÿ\\s]+$/.test(input.value);
+                isValid = /^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/.test(input.value.trim());
             }
 
             if (!isValid) {
@@ -140,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (input.type === 'checkbox') {
                     return input.checked;
                 }
-                return input.checkValidity() && input.value.length > 0;
+                return input.checkValidity() && input.value.trim().length > 0;
             });
 
             submitButton.disabled = !allValid;
