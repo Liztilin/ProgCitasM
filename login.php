@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     if (empty($email) || empty($password)) {
-        $mensaje = '<div class="error">Todos los campos son obligatorios</div>';
+        $mensaje = '<div class="alert alert-error">Todos los campos son obligatorios</div>';
     } else {
         $stmt = $conn->prepare("SELECT id_usuario, nombre, password FROM usuario WHERE email = ?");
         $stmt->bind_param("s", $email);
@@ -27,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header("Location: Iniciovr2.html");
                 exit();
             } else {
-                $mensaje = '<div class="error">Credenciales incorrectas</div>';
+                $mensaje = '<div class="alert alert-error">Credenciales incorrectas</div>';
             }
         } else {
-            $mensaje = '<div class="error">Credenciales incorrectas</div>';
+            $mensaje = '<div class="alert alert-error">Credenciales incorrectas</div>';
         }
         $stmt->close();
     }
@@ -40,42 +40,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="login.css">
-    <style>
-        .error {
-            color: white;
-            background-color: #e74c3c;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            text-align: center;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Iniciar Sesión | Sistema Médico Azul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="login.css" />
 </head>
 <body>
-    <div class="login-container">
-        <h1>¡Bienvenido!</h1>
-
-        <?php if (!empty($mensaje)) echo $mensaje; ?>
-
-        <form class="login-form" method="POST" action="">
-            <label for="email">Correo electrónico</label>
-            <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com">
-
-            <label for="password">Contraseña</label>
-            <input type="password" id="password" name="password" required placeholder="********">
-
-            <div class="options">
-                <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+    <div class="form-container">
+        <div class="form-content animate__animated animate__fadeIn">
+            <div class="logo">
+                <img src="imagenes progsanacita/logo_sanacita2.png" alt="Logo Sanacita" class="logo-img" />
             </div>
+            <h1 class="form-title">Iniciar Sesión</h1>
+            <p class="form-subtitle">Ingrese sus credenciales para acceder al sistema</p>
 
-            <button type="submit">Entrar</button>
-        </form>
+            <?php if (!empty($mensaje)) echo $mensaje; ?>
 
-        <p class="register-link">¿No tienes una cuenta? <a href="crear_cuenta.php">Crear una cuenta</a></p>
+            <form class="login-form" method="POST" action="">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        required
+                        placeholder="correo@ejemplo.com"
+                        oninput="validateField(this)"
+                    />
+                    <p id="emailError" class="error-message">Ingrese un correo electrónico válido</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="password"
+                        required
+                        placeholder="********"
+                        minlength="8"
+                        oninput="validateField(this)"
+                    />
+                    <p id="passwordError" class="error-message">La contraseña debe tener al menos 8 caracteres</p>
+                </div>
+
+                <div class="options">
+                    <a href="olvidaste_contraseña.php" class="forgot-password">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+
+            <div class="login-link">
+                ¿No tienes una cuenta? <a href="Crear_cuenta.php" style="color: var(--primary-color)">Crear una cuenta</a>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function validateField(input) {
+            const errorElement = document.getElementById(`${input.id}Error`);
+            let isValid = true;
+
+            if (input.type === 'email') {
+                isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+            } else if (input.type === 'password') {
+                isValid = input.value.length >= 8;
+            }
+
+            if (!isValid) {
+                input.classList.add('is-invalid');
+                errorElement?.classList.add('visible');
+            } else {
+                input.classList.remove('is-invalid');
+                errorElement?.classList.remove('visible');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const inputs = document.querySelectorAll('.login-form input');
+            inputs.forEach((input) => {
+                if (input.value) validateField(input);
+                input.addEventListener('blur', () => validateField(input));
+            });
+        });
+    </script>
 </body>
 </html>
