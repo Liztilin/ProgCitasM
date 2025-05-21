@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Contraseña - Sanacita</title>
-    <link rel="stylesheet" href="nueva_contra.css">
+    <link rel="stylesheet" href="css/nueva_contra.css">
 </head>
 <body>
     <div class="medical-wrapper">
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <h1 class="medical-title">
                     <span>Nueva Contraseña</span>
-                    <small>Sistema Médico Sanacita</small>
+                    <small>Sanacita</small>
                 </h1>
             </div>
 

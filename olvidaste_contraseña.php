@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <h1 class="medical-title">
                     <span>Recuperar Acceso</span>
-                    <small>Sistema Médico Sanacita</small>
+                    <small>Sanacita</small>
                 </h1>
             </div>
 
@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="medical-footer">
                 <div class="divider"></div>
-                <p class="login-link">¿Recordó su contraseña? <a href="login.php">Ingresar ahora</a></p>
+                <p class="login-link">¿Recordó su contraseña? <a href="login.php">Iniciar Sesion</a></p>
             </div>
         </div>
         
