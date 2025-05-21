@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-container">
         <div class="form-content animate__animated animate__fadeIn">
             <div class="logo">
-                <img src="imagenes progsanacita/logo_sanacita2.png" alt="Logo Sanacita" class="logo-img" />
+                <img src="Imagenes progsanacita/logo_sanacita2.png" alt="Logo Sanacita" class="logo-img" />
             </div>
             <h1 class="form-title">Registro de Paciente</h1>
             <p class="form-subtitle">Complete sus datos para acceder a nuestro sistema de citas médicas</p>

@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="medical-card">
             <div class="medical-header">
                 <div class="medical-logo">
-                    <img src="imagenes progsanacita/logo_sanacita2.png" alt="Sanacita Logo">
+                    <img src="Imagenes progsanacita/logo_sanacita2.png" alt="Sanacita Logo">
                 </div>
                 <h1 class="medical-title">
                     <span>Nueva Contraseña</span>
