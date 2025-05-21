@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <?php if (!empty($mensaje)) echo $mensaje; ?>
 
+<<<<<<< HEAD
             <form class="login-form" method="POST" action="">
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
@@ -99,6 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ¿No tienes una cuenta? <a href="Crear_cuenta.php" style="color: var(--primary-color)">Crear una cuenta</a>
             </div>
         </div>
+=======
+        <p class="register-link">¿No tienes una cuenta? <a href="Crear cuenta.php">Crear una cuenta</a></p>
+>>>>>>> modifificaciones-minimas
     </div>
 
     <script>

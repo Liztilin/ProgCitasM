@@ -1,24 +1,38 @@
 <?php
+session_start();
 require 'conexion.php';
 
 $mensaje = '';
 
+function enviarCorreoRecuperacion($email, $token) {
+    $asunto = "Recuperación de contraseña";
+    $enlace = "http://" . $_SERVER['HTTP_HOST'] . "/nueva_contrasena.php?token=$token";
+    $mensajeCorreo = "Hola,\n\nPara restablecer tu contraseña, haz clic en el siguiente enlace:\n\n$enlace\n\nEste enlace expirará en 1 hora.\n\nSi no solicitaste este cambio, ignora este mensaje.";
+    
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $headers .= "From: Recuperación <no-reply@" . $_SERVER['HTTP_HOST'] . ">\r\n";
+    $headers .= "Reply-To: soporte@" . $_SERVER['HTTP_HOST'] . "\r\n";
+
+    return mail($email, $asunto, $mensajeCorreo, $headers);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+<<<<<<< HEAD
     // Validar y sanitizar los datos
     $nombre = trim(filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING));
     $apellido_p = trim(filter_input(INPUT_POST, 'apellido_p', FILTER_SANITIZE_STRING));
     $apellido_m = trim(filter_input(INPUT_POST, 'apellido_m', FILTER_SANITIZE_STRING));
     $edad = filter_input(INPUT_POST, 'edad', FILTER_SANITIZE_NUMBER_INT);
     $genero = filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING);
+=======
+>>>>>>> modifificaciones-minimas
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-    // Validaciones
-    if (!$nombre || !$apellido_p || !$apellido_m || !$edad || !$genero || !$email || !$password) {
-        $mensaje = '<div class="error">Todos los campos son obligatorios</div>';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $mensaje = '<div class="error">El correo electrónico no es válido</div>';
+    
+    if (empty($email)) {
+        $mensaje = '<div class="error">Por favor ingresa tu correo electrónico</div>';
     } else {
+<<<<<<< HEAD
         // Verificar si el correo ya existe
         $check_email = $conn->prepare("SELECT email FROM usuario WHERE email = ?");
         $check_email->bind_param("s", $email);
@@ -247,5 +261,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 });
         });
     </script>
+=======
+        $stmt = $conn->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows === 1) {
+            $token = bin2hex(random_bytes(32));
+            $expiracion = date("Y-m-d H:i:s", strtotime("+1 hour"));
+            
+            $stmt2 = $conn->prepare("UPDATE usuario SET token_recuperacion = ?, token_expiracion = ? WHERE email = ?");
+            $stmt2->bind_param("sss", $token, $expiracion, $email);
+            
+            if ($stmt2->execute()) {
+                if (enviarCorreoRecuperacion($email, $token)) {
+                    $mensaje = '<div class="success">Se ha enviado un enlace de recuperación a tu correo electrónico. Revisa tu bandeja de entrada.</div>';
+                } else {
+                    $mensaje = '<div class="error">Error al enviar el correo. Por favor intenta nuevamente.</div>';
+                }
+            } else {
+                $mensaje = '<div class="error">Error al procesar tu solicitud. Intenta nuevamente.</div>';
+            }
+            $stmt2->close();
+        } else {
+            $mensaje = '<div class="error">El correo electrónico no está registrado</div>';
+        }
+        $stmt->close();
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="olvidaste_contraseña.css">
+</head>
+<body>
+    <div class="recovery-container">
+        <h1>Recuperar Contraseña</h1>
+
+        <?php if (!empty($mensaje)) echo $mensaje; ?>
+
+        <form class="recovery-form" method="POST" action="">
+            <label for="email">Correo electrónico registrado</label>
+            <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com">
+
+            <button type="submit">Enviar enlace de recuperación</button>
+        </form>
+
+        <p class="login-link">¿Recordaste tu contraseña? <a href="login.php">Iniciar sesión</a></p>
+    </div>
+>>>>>>> modifificaciones-minimas
 </body>
 </html> 
