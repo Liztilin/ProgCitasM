@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
 
             <div class="login-link">
-                ¿No tienes una cuenta? <a href="Crear_cuenta.php" style="color: var(--primary-color)">Crear una cuenta</a>
+                ¿No tienes una cuenta? <a href="Crear cuenta.php" style="color: var(--primary-color)">Crear una cuenta</a>
             </div>
         </div>
     </div>
