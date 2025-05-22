@@ -3,12 +3,12 @@ $es_local = strpos($_SERVER['HTTP_HOST'], 'localhost') !== false || strpos($_SER
 
 if ($es_local) {
     // Conexión en entorno local (XAMPP con puerto 3308)
-    $host = "127.0.0.1";
+    $host = "localhost";
     $usuario = "root";
-    $clave = "";
+    $clave = "1234";
     $base_de_datos = "sanacita";
     $puerto = 3308;
-    $conn = new mysqli($host, $usuario, $clave, $base_de_datos, $puerto);
+    $conn = new mysqli($host, $usuario, $clave, $base_de_datos);
 } else {
     // Conexión en servidor remoto
     $host = "localhost";

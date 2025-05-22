@@ -1,79 +1,128 @@
-body{
-    background-color:rgb(249, 249, 249);
-}
-#hero{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    flex-direction: column;
-    height: 90vh;
-    color: rgb(4, 4, 137);
-    background-image:url("Imagenes progsanacita/hero.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-}
-button{
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: 1px solid rgba(0,0,0,5);
-    box-shadow: 2px 2px 10px rgba(0,0,0,5);
-    color:white;
-    background-color: rgb(50, 50, 153);
-}
-button:hover{
-    background-color: rgb(14, 21, 78);
-}
-.container{
-    max-width: 1400px;
-    margin: auto;
-}
-header{
-    background-color:rgb(254, 252, 249);
-}
-header .logo{
-    margin: 0;
-    padding: 25px 30px;
-    font-weight: bold;
-    color: rgb(34, 34, 109);
-    font-size: 1.6em;
-}
-header .container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 30px;
-}
-header nav {
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-}
-header a{
-    padding: 5px 12px;
-    text-decoration: none;
-    font-weight: bold;
-    color: black;
-}
-header a:hover{
-    color: rgb(80, 80, 199);
-}
-@media (min-width: 720px){
-    header{
-        position: fixed;
-        width: 100%;
-    }
-    header .container{
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    header nav{
-        flex-direction: row;
-        padding-bottom: 0px;
-        padding-right: 20px;
-    }
-}
+        :root {
+            --azul: rgb(4, 4, 137);
+            --azul-oscuro: rgb(14, 21, 78);
+            --azul-claro: rgb(50, 50, 153);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: rgb(249, 249, 249);
+        }
+
+        header {
+            background-color: rgb(254, 252, 249);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 999;
+        }
+
+        header .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.8em;
+            color: var(--azul);
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: bold;
+            color: black;
+            padding: 5px 12px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--azul-claro);
+        }
+
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            height: 100vh;
+            color: var(--azul);
+            background-image: url("Imagenes progsanacita/hero.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            padding-top: 100px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        #hero h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .botones {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            font-size: 1em;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            background-color: var(--azul-claro);
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        @media (max-width: 768px) {
+            #hero h1 {
+                font-size: 1.8em;
+            }
+
+            nav {
+                justify-content: center;
+                padding-top: 10px;
+            }
+
+            .botones {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            button {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
