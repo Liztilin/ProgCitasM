@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
     <meta charset="UTF-8">
     <title>Verificar Código - Sanacita</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="Ingresar_token.css">
+    <link rel="stylesheet" href="ingresar_token.css">
 </head>
 <body>
     <div class="medical-wrapper">
