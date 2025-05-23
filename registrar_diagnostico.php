@@ -217,9 +217,9 @@ $stmt->close();
         <h2>Diagnóstico</h2>
         <textarea name="diagnostico" rows="6" required></textarea>
     </div>
-
-    <div class="nota">
-        <p>* Campos obligatorios</p>
+    <div class="diagnostico">
+        <h2>Prescripción</h2>
+        <textarea name="prescripcion" rows="4" placeholder="Ingrese la prescripción si aplica..."></textarea>
     </div>
 
     <div class="boton-contenedor">

@@ -98,7 +98,7 @@ if ($stmt->execute()) {
         ";
 
         $mail->send();
-        // echo "Correo enviado con éxito";
+        // echo "Correo enviado con éxito"; y guardado de la cita en la bd
         $titulo = "Cita agendada con éxito";
         $mensaje = "Tu cita ha sido registrada para el día $fecha a las $hora en el centro seleccionado.";
 
