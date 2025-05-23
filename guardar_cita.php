@@ -51,6 +51,9 @@ $stmt->bind_param("iisss", $id_usuario, $centro, $fecha, $hora, $medio);
 
 if ($stmt->execute()) {
 
+
+
+
     // 📩 Obtener correo y nombre del usuario
     $stmt_user = $conn->prepare("SELECT email, nombre FROM usuario WHERE id_usuario = ?");
     $stmt_user->bind_param("i", $id_usuario);
@@ -96,6 +99,13 @@ if ($stmt->execute()) {
 
         $mail->send();
         // echo "Correo enviado con éxito";
+        $titulo = "Cita agendada con éxito";
+        $mensaje = "Tu cita ha sido registrada para el día $fecha a las $hora en el centro seleccionado.";
+
+        $stmtNoti = $conn->prepare("INSERT INTO notificaciones (id_usuario, titulo, mensaje) VALUES (?, ?, ?)");
+        $stmtNoti->bind_param("iss", $id_usuario, $titulo, $mensaje);
+        $stmtNoti->execute();
+
     } catch (Exception $e) {
         // Opcional: loguear error o mostrar mensaje de advertencia
         // echo "Error al enviar el correo: {$mail->ErrorInfo}";

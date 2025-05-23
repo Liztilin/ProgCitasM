@@ -11,7 +11,7 @@ require_once 'conexion.php';
 
 
 // Consultar citas del usuario
-$sql = "SELECT c.fecha, c.horario, cs.nombre_centro, c.estado
+$sql = "SELECT c.id_cita,c.fecha, c.horario, cs.nombre_centro, c.estado
         FROM cita c
         JOIN centro_salud cs ON c.id_centro = cs.id_centro
         WHERE c.id_usuario = ?
@@ -65,6 +65,25 @@ $resultado = $stmt->get_result();
                     <td><?= htmlspecialchars($fila['horario']) ?></td>
                     <td><?= htmlspecialchars($fila['nombre_centro']) ?></td>
                     <td><?= htmlspecialchars($fila['estado']) ?></td>
+                    <td>
+                        <?php if ($fila['estado'] === 'pendiente'): ?>
+                            <a href="cambiar_cita.php?id_cita=<?= $fila['id_cita'] ?>" class="btn btn-sm btn-outline-primary">Reprogramar</a>
+                        <?php else: ?>
+                            -
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($fila['estado'] === 'pendiente'): ?>
+                            <a href="cancelar_cita.php?id_cita=<?= $fila['id_cita'] ?>" 
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('¿Estás seguro de que quieres cancelar esta cita?');">
+                            Cancelar
+                            </a>
+                        <?php else: ?>
+                            <span class="text-muted">-</span>
+                        <?php endif; ?>
+                    </td>
+
                 </tr>
             <?php endwhile; ?>
         </tbody>
