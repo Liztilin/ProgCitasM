@@ -6,7 +6,10 @@ require 'conexion.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require 'vendor/autoload.php';
+require 'libs/phpmailer/PHPMailer.php';
+require 'libs/phpmailer/SMTP.php';
+require 'libs/phpmailer/Exception.php';
+
 
 $mensaje = '';
 
@@ -17,12 +20,12 @@ function enviarCorreoRecuperacion($email, $token) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'antonioeimy1@gmail.com';    // CAMBIAR ESTO
-        $mail->Password   = 'zctgcvndmoglpnsq'; // CAMBIAR ESTO
+        $mail->Username   = 'sanacita.contacto@gmail.com';    // CAMBIAR ESTO
+        $mail->Password   = 'gxnpdsxwwzzicbzj'; // CAMBIAR ESTO
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port       = 465;
 
-        $mail->setFrom('tucorreo@gmail.com', 'Nombre Sitio');
+        $mail->setFrom('sanacita.contacto@gmail.com', 'Sanacita');
         $mail->addAddress($email);
         $mail->isHTML(true);
         $mail->Subject = 'Código de recuperación';

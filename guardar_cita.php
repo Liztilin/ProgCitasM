@@ -75,12 +75,12 @@ if ($stmt->execute()) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'zapatagilgenesiscbtis85@gmail.com'; // tu correo
-        $mail->Password   = 'raft bnyb llez njsc';  // tu contraseña de aplicación
+        $mail->Username   = 'sanacita.contacto@gmail.com'; // tu correo
+        $mail->Password   = 'gxnp dsxw wzzi cbzj';  // tu contraseña de aplicación
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
-        $mail->setFrom('zapatagilgenesiscbtis85@gmail.com', 'Sanacita');
+        $mail->setFrom('sanacita.contacto@gmail.com', 'Sanacita');
         $mail->addAddress($correo_usuario, $nombre_usuario);
 
         $mail->isHTML(true);

@@ -23,6 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['id_usuario'] = $usuario['id_usuario'];
                 $_SESSION['usuario_nombre'] = $usuario['nombre'];
                 $_SESSION['usuario_email'] = $email;
+                $_SESSION['email_recuperacion'];
+                $_SESSION['id_usuario_recuperacion'];
+
 
                 header("Location: Iniciovr2.html");
                 exit();

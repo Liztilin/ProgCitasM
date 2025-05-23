@@ -20,10 +20,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['token'])) {
             $result = $stmt->get_result();
 
             if ($result->num_rows === 1) {
+                //  OBTENER EL id_usuario DEL TOKEN
+                $stmt = $conn->prepare("SELECT t.id_usuario 
+                                        FROM token_recuperacion t 
+                                        JOIN usuario u ON t.id_usuario = u.id_usuario 
+                                        WHERE u.email = ? AND t.token = ?");
+                $stmt->bind_param("ss", $email, $token);
+                $stmt->execute();
+                $res = $stmt->get_result();
+                $row = $res->fetch_assoc();
+
+                $_SESSION['id_usuario_recuperacion'] = $row['id_usuario'];  //  NECESARIO
                 $_SESSION['token_valido'] = true;
+
                 header('Location: nueva_contra.php');
                 exit();
-            } else {
+            }
+            else {
                 $mensaje = '<div class="medical-alert">Código inválido o expirado</div>';
             }
         } catch (Exception $e) {

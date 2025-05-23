@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Exception $e) {
             $conn->rollback();
             error_log("Error actualizando contraseña: " . $e->getMessage());
-            $errores[] = 'Error en el sistema. Por favor, inténtelo más tarde.';
+            $errores[] = 'Error en el sistema: ' . $e->getMessage();
         }
     }
 
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nueva Contraseña - Sanacita</title>
-    <link rel="stylesheet" href="css/nueva_contra.css">
+    <link rel="stylesheet" href="nueva_contra.css">
 </head>
 <body>
     <div class="medical-wrapper">
