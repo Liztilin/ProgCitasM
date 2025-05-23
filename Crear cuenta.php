@@ -4,39 +4,23 @@ require 'conexion.php';
 
 $mensaje = '';
 
-function enviarCorreoRecuperacion($email, $token) {
-    $asunto = "Recuperación de contraseña";
-    $enlace = "http://" . $_SERVER['HTTP_HOST'] . "/nueva_contrasena.php?token=$token";
-    $mensajeCorreo = "Hola,\n\nPara restablecer tu contraseña, haz clic en el siguiente enlace:\n\n$enlace\n\nEste enlace expirará en 1 hora.\n\nSi no solicitaste este cambio, ignora este mensaje.";
-    
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-    $headers .= "From: Recuperación <no-reply@" . $_SERVER['HTTP_HOST'] . ">\r\n";
-    $headers .= "Reply-To: soporte@" . $_SERVER['HTTP_HOST'] . "\r\n";
-
-    return mail($email, $asunto, $mensajeCorreo, $headers);
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Validar y sanitizar los datos
     $nombre = trim(filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING));
     $apellido_p = trim(filter_input(INPUT_POST, 'apellido_p', FILTER_SANITIZE_STRING));
     $apellido_m = trim(filter_input(INPUT_POST, 'apellido_m', FILTER_SANITIZE_STRING));
     $edad = filter_input(INPUT_POST, 'edad', FILTER_SANITIZE_NUMBER_INT);
     $genero = filter_input(INPUT_POST, 'genero', FILTER_SANITIZE_STRING);
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
     if (empty($email)) {
         $mensaje = '<div class="error">Por favor ingresa tu correo electrónico</div>';
     } else {
-
-        // Verificar si el correo ya existe
         $check_email = $conn->prepare("SELECT email FROM usuario WHERE email = ?");
         $check_email->bind_param("s", $email);
         $check_email->execute();
         $check_email->store_result();
-        
+
         if ($check_email->num_rows > 0) {
             $mensaje = '<div class="error">El correo electrónico ya está registrado</div>';
         } else {
@@ -46,10 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($stmt->execute()) {
                 $mensaje = '<div class="exito">¡Registro exitoso! Bienvenido a nuestro sistema de citas médicas.</div>';
                 echo "<script>window.location.href = 'login.php';</script>";
+                exit;
             } else {
                 $mensaje = '<div class="error">Error al registrar: ' . $stmt->error . '</div>';
             }
         }
+
         $check_email->close();
     }
 }
@@ -209,51 +195,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+<script>
+    function validateField(input) {
+        const errorElement = document.getElementById(`${input.id}Error`);
+        let isValid = true;
 
-    <script>
-        function validateField(input) {
-            const errorElement = document.getElementById(`${input.id}Error`);
-            const submitButton = document.getElementById('submitBtn');
-            let isValid = true;
-
-            if (input.type === 'email') {
-                isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
-            } else if (input.type === 'password') {
-                isValid = input.value.length >= 8;
-            } else if (input.type === 'text') {
-                isValid = /^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/.test(input.value.trim());
-            }
-
-            if (!isValid) {
-                input.classList.add('is-invalid');
-                errorElement?.classList.add('visible');
-            } else {
-                input.classList.remove('is-invalid');
-                errorElement?.classList.remove('visible');
-            }
-
-            const form = document.getElementById('registrationForm');
-            const allInputs = form.querySelectorAll('input:not([type="range"])');
-            const allValid = Array.from(allInputs).every((input) => {
-                if (input.type === 'radio') {
-                    return document.querySelector('input[name="genero"]:checked');
-                }
-                if (input.type === 'checkbox') {
-                    return input.checked;
-                }
-                return input.checkValidity() && input.value.trim().length > 0;
-            });
-
-            submitButton.disabled = !allValid;
+        if (input.type === 'email') {
+            isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value);
+        } else if (input.type === 'password') {
+            isValid = input.value.length >= 8;
+        } else if (input.type === 'text') {
+            isValid = /^[A-Za-zÀ-ÿ\s]{2,}$/.test(input.value.trim());
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const inputs = document.querySelectorAll('#registrationForm input');
-            inputs.forEach((input) => {
-                if (input.value) validateField(input);
-                input.addEventListener('blur', () => validateField(input));
-            });
-            
-            document.querySelector('button').addEventListener('click', () => {
-                document.documentElement.style.setProperty('--background-color', '#ffebee')};
-});
+        if (!isValid) {
+            input.classList.add('is-invalid');
+            errorElement?.classList.add('visible');
+        } else {
+            input.classList.remove('is-invalid');
+            errorElement?.classList.remove('visible');
+        }
+
+        checkFormValidity(); // Validar todo el formulario
+    }
+
+    function checkFormValidity() {
+        const form = document.getElementById('registrationForm');
+        const submitButton = document.getElementById('submitBtn');
+
+        const inputs = form.querySelectorAll('input');
+        let allValid = true;
+
+        inputs.forEach((input) => {
+            if (input.type === 'radio') {
+                const selected = form.querySelector('input[name="genero"]:checked');
+                if (!selected) allValid = false;
+            } else if (input.type === 'checkbox') {
+                if (!input.checked) allValid = false;
+            } else if (!input.checkValidity() || input.value.trim() === '') {
+                allValid = false;
+            }
+        });
+
+        submitButton.disabled = !allValid;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = document.querySelectorAll('#registrationForm input');
+
+        inputs.forEach((input) => {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password') {
+                input.addEventListener('input', () => validateField(input));
+            }
+
+            if (input.type === 'radio' || input.type === 'checkbox') {
+                input.addEventListener('change', checkFormValidity);
+            }
+
+            if (input.value) validateField(input); // Por si hay autocompletado
+        });
+
+        checkFormValidity(); // Validar al cargar
+    });
+</script>
