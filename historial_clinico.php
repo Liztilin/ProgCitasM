@@ -136,7 +136,7 @@ $resultado = $stmt->get_result();
         <div class="container">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                    <img src="imagenes progsanacita/logo_sanacita2.png" alt="Logo" height="40" class="me-2">
+                    <img src="Imagenes progsanacita/logo_sanacita2.png" alt="Logo" height="40" class="me-2">
                     <h4 class="mb-0">Sanacita - Historial Clínico</h4>
                 </div>
                 <a href="citas_medico.php" class="btn btn-light">
