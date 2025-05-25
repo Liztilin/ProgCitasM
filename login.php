@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['id_usuario_recuperacion'];
 
 
-                header("Location: Iniciovr2.html");
+                header("Location: Iniciovr2.php");
                 exit();
             } else {
                 $mensaje = '<div class="alert alert-error">Credenciales incorrectas</div>';
