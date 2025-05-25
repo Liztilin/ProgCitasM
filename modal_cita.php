@@ -38,7 +38,7 @@ $centros = $conn->query("SELECT id_centro, nombre_centro FROM centro_salud");
             <label class="form-label">Medio de notificación</label>
             <select name="medio" class="form-select" required>
                 <option value="email">Correo electrónico</option>
-                <option value="whatsapp">WhatsApp</option>
+                <!-- <option value="whatsapp">WhatsApp</option> -->
             </select>
         </div>
 

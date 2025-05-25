@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,10 +13,18 @@
     <link rel="stylesheet" href="Inicio vr2.css">
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-content">
-            <button id="menuBtn" class="menu-btn"><i class="bi bi-list"></i></button>
+            <!-- Botón de menú -->
+            <div class="logo-container">
+                <button id="menuBtn" class="menu-btn"><i class="bi bi-list"></i></button>
+            </div>
+
+            <!-- Bienvenida y avatar -->
+            <div class="user-nav">
+                <span class="welcome-text">Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario') ?></span>
+                <img src="https://ui-avatars.com/api/?name=<?= urlencode($_SESSION['usuario_nombre'] ?? 'Usuario') ?>&background=random" alt="Usuario" class="user-avatar">
+            </div>
         </div>
     </header>
 
