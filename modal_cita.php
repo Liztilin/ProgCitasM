@@ -1,6 +1,5 @@
 <?php
-// Puedes incluir este archivo donde quieras mostrar el modal
-// Asegúrate de tener $conn disponible
+require_once 'conexion.php';
 $centros = $conn->query("SELECT id_centro, nombre_centro FROM centro_salud");
 ?>
 
@@ -13,9 +12,12 @@ $centros = $conn->query("SELECT id_centro, nombre_centro FROM centro_salud");
       </div>
       <div class="modal-body">
 
+        <!-- Centro dinámico desde el carrusel -->
+        <div id="centroInfo" class="mb-2 text-primary fw-bold text-center"></div>
+
         <div class="mb-3">
             <label class="form-label">Centro de Salud</label>
-            <select name="centro" class="form-select" required>
+            <select name="centro" class="form-select" id="selectCentro" required>
                 <option value="">Seleccione uno...</option>
                 <?php while ($centro = $centros->fetch_assoc()): ?>
                     <option value="<?= $centro['id_centro'] ?>"><?= $centro['nombre_centro'] ?></option>
@@ -48,12 +50,15 @@ $centros = $conn->query("SELECT id_centro, nombre_centro FROM centro_salud");
     </form>
   </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const fechaInput = document.querySelector('input[name="fecha"]');
-    const centroInput = document.querySelector('select[name="centro"]');
+    const centroInput = document.getElementById('selectCentro');
     const horarioSelect = document.getElementById('horario');
+    const centroInfo = document.getElementById('centroInfo');
 
+    // Cargar horarios disponibles al seleccionar centro y fecha
     function cargarHorariosDisponibles() {
         const fecha = fechaInput.value;
         const centro = centroInput.value;
@@ -81,5 +86,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     fechaInput.addEventListener('change', cargarHorariosDisponibles);
     centroInput.addEventListener('change', cargarHorariosDisponibles);
+
+    // Prellenar modal desde el botón del carrusel
+    document.querySelectorAll('.btn-agendar').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const idCentro = this.getAttribute('data-id-centro');
+            const nombreCentro = this.getAttribute('data-nombre-centro');
+
+            if (idCentro) {
+                centroInput.value = idCentro;
+                cargarHorariosDisponibles(); // Para actualizar los horarios al abrir
+            }
+        });
+    });
 });
 </script>
